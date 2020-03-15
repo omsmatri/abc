@@ -1,32 +1,56 @@
-var http = require('http');
-var fs = require('fs');
-
-var server = http.createServer(function(req, resp){
-  // Print the name of the file for which request is made.
-  console.log("Request for demo file received.");
-  fs.readFile("Documents/nodejs/demo.html",function(error, data){
-    if (error) {
-      resp.writeHead(404);
-      resp.write('Contents you are looking for-not found');
-      resp.end();
-    }  else {
-      resp.writeHead(200, {
-        'Content-Type': 'text/html'
-      });
-      resp.write(data.toString());
-      resp.end();
-    }
-  });
-});
-
-server.listen(8081, '127.0.0.1');
-
-console.log('Server running at http://127.0.0.1:8081/');
-
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-  <body>
-    <h1>Heading</h1>
-    <p>Paragraph.</p>
-  </body>
+<head>
+
+</head>
+<body>
+
+<p><div id="lay1" style="width:50%;height:50%" class="droptarget" ondragstart="dragStart(event)" ondragend="dragEnd(event)" ondrop="drop(event);event.stopPropagation();" ondragover="allowDrop(event)" draggable="true">
+Single Div Element
+</div><input id="inp1" ondragstart="dragStart(event)" ondragend="dragEnd(event)" draggable="true"></input>
+</p>
+
+<div class="droptarget" ondrop="drop(event)" ondragover="allowDrop(event)">
+  <p ondragstart="dragStart(event)" ondragend="dragEnd(event)" draggable="true" id="dragtarget">Drag me!</p>
+</div>
+
+<div class="droptarget"  onclick="alert(2)" style="width:50%;height:50%" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+
+
+<p id="demo"></p>
+
+<script>
+var inner = document.getElementById("lay1");
+inner.addEventListener('click',innerFunction);
+function innerFunction(event){
+  event.stopPropagation();
+  console.log("Inner Functiuon");
+}
+function dragStart(event) {
+  event.dataTransfer.setData("Text", event.target.id);
+}
+
+function dragging(event) {
+  document.getElementById("demo").innerHTML = "The p element is being dragged";
+}
+
+function allowDrop(event) {
+  event.preventDefault();
+}
+
+function copyElement(elmnt){
+  var div = document.createElement(elmnt.tagName);
+  div.innerHTML += elmnt.outerHTML;
+  return div;
+}
+function drop(event) {
+event.preventDefault();
+  var data = event.dataTransfer.getData("Text");
+ event.target.appendChild(copyElement(document.getElementById(data)));
+  document.getElementById("demo").innerHTML = "The p element was dropped";
+}
+</script>
+
+</body>
 </html>
