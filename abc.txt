@@ -1,20 +1,18 @@
-#overlay {
-  position: fixed;
-  display: none;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,0.5);
-  z-index: 2;
-  cursor: pointer;
-}
-function on1() {
-  document.getElementById("overlay").style.display = "block";
-}
-
-function off1() {
-  document.getElementById("overlay").style.display = "none";
-}
+if (req.url === "/create") {
+        fs.readFile("AppPages/MyPage.html", function (error, pgResp) {
+            if (error) {
+                resp.writeHead(404);
+                resp.write('Contents you are looking are Not Found');
+            } else {
+                resp.writeHead(200, { 'Content-Type': 'text/html' });
+                resp.write(pgResp);
+            }
+             
+            resp.end();
+        });
+    } else {
+        //4.
+        resp.writeHead(200, { 'Content-Type': 'text/html' });
+        resp.write('<h1>Product Manaager</h1><br /><br />To create product please enter: ' + req.url);
+        resp.end();
+    }
